@@ -1,41 +1,35 @@
 import datetime as dt
 import requests
-
+from config import config
 
 class News_Wrangler:
-    def __init__(self,address,API_KEY):
-        self.save_location = None
-        self.address = address
-        self.API_KEY = API_KEY
+    """
+        Gets raw news string from news source
+    """
+    def __init__(self):
         return
 
-
-    def search(self,search=None,date="2012-10-9"):
+    def search(self,search=None,date=None):
         """
-            Run a search for the query on the API
+            Prepare dates
         """
 
-        # if not date:
-        #     t = dt.date.today()
-        #     date = "{}-{}-{}".format(t.year,t.month,t.day)
-        #     print("Date:",date)
-
-        params = {
-            "api-key":self.API_KEY,
-            "q":search,
-            "from-date":"2012-10-9",
-            "to-date":"2013-10-10"
-        }
-
-        r = requests.get(self.address,params=params)
-        results = r.json()
-
-        for result in results["response"]:
-            if result != "result":
-                print(result)
+        if not date:
+            date = dt.date.today()
         
-        for item in results["response"]["results"]:
-            print(item,"\n")
+        to_date = "{}-{}-{}".format(date.year,date.month,date.day)
 
-    def set_save_location(self,location):
-        self.save_location = location
+        date = date - dt.timedelta(days=10)
+
+        from_date = "{}-{}-{}".format(date.year,date.month,date.day)
+
+        return self.api_search(search=search,from_date=from_date,to_date=to_date)
+
+    def api_search(self,search=None,from_date=None,to_date=None):
+        return
+
+        
+        
+
+        
+        
