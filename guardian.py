@@ -7,6 +7,7 @@ address = "https://content.guardianapis.com/search"
 class Guardian(News_Wrangler):
     def __init__(self):
         super()
+        self.name = "guardian"
         self.address = config["sources"]["guardian"]["address"]
         self.API_KEY = config["sources"]["guardian"]["API_KEY"]
 
