@@ -1,6 +1,5 @@
 import datetime as dt
 import requests
-from config import config
 
 class News_Wrangler:
     """
@@ -9,7 +8,7 @@ class News_Wrangler:
     def __init__(self):
         return
 
-    def search(self,search=None,date=None):
+    def search(self,search=None,date=None,news_delay=3):
         """
             returns text from news source
 
@@ -27,9 +26,9 @@ class News_Wrangler:
 
         from_date = "{}-{}-{}".format(date.year,date.month,date.day)
 
-        return self.api_search(search=search,from_date=from_date,to_date=to_date)
+        return self.api_search(search=search,from_date=from_date,to_date=to_date,news_delay=news_delay)
 
-    def api_search(self,search=None,from_date=None,to_date=None):
+    def api_search(self,search=None,from_date=None,to_date=None,news_delay=None):
         return
 
         

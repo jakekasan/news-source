@@ -1,6 +1,6 @@
-from config import config
+from config.sources import guardian as api
 import requests
-from news_wrangler import News_Wrangler
+from sources.news_wrangler import News_Wrangler
 
 address = "https://content.guardianapis.com/search"
 
@@ -8,15 +8,19 @@ class Guardian(News_Wrangler):
     def __init__(self):
         super()
         self.name = "guardian"
-        self.address = config["sources"]["guardian"]["address"]
-        self.API_KEY = config["sources"]["guardian"]["API_KEY"]
+        self.address = api["address"]
+        self.API_KEY = api["API_KEY"]
 
-    def api_search(self,search,from_date=None,to_date=None):
+    def api_search(self,search,from_date=None,to_date=None,news_delay=None):
         """
             API-specific search function
 
-            returns text
+            returns raw text for this source
         """
+
+        if news_delay is None:
+            # reset to default
+            news_delay = 3
 
         params = {
             "api-key":self.API_KEY,
