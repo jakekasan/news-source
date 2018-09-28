@@ -14,6 +14,8 @@ class Guardian(News_Wrangler):
     def api_search(self,search,from_date=None,to_date=None):
         """
             API-specific search function
+
+            returns text
         """
 
         params = {
@@ -21,23 +23,35 @@ class Guardian(News_Wrangler):
             "q":search,
             "from-date":from_date,
             "to-date":to_date,
-            "show-fields":"bodyText"
+            "show-fields":"bodyText",
+            "tags":"business"
         }
 
-        r = requests.get(self.address,params=params)
-        results = r.json()
+        try:
+            r = requests.get(self.address,params=params)
+            results = r.json()
 
-        articles = results["response"]["results"]
+            articles = results["response"]["results"]
 
-        return self.process_result(articles)
+            return self.process_result(articles)
 
-    def process_result(self,results):
-        if len(results) < 1:
+        except:
             return ""
 
-        all_text = ""
+    def process_result(self,results):
+        """
+            Takes the results from the API and processes them to a single string
+        """
+        try:
+            if len(results) < 1:
+                return ""
 
-        for article in results:
-            all_text = "".join([article["fields"]["bodyText"],all_text])
+            all_text = ""
 
-        return all_text
+            for article in results:
+                all_text = "".join([article["fields"]["bodyText"],all_text])
+
+            return all_text
+
+        except:
+            return ""
