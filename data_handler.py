@@ -9,10 +9,11 @@ source_wranglers = {
 }
 
 class Data_Handler:
-    def __init__(self,df=None,sources=["guardian"],debug=False):
+    def __init__(self,df=None,sources=["guardian"],debug=False,datecol="Date"):
         self.df = df
         self.sources = [source_wranglers[x]() for x in sources]
         self.debug = debug
+        self.datecol = datecol
 
     def run(self,df=None,name=None):
         if name is None:
@@ -51,6 +52,7 @@ class Data_Handler:
         return row
 
     def process_date(self,df):
+        df["date"] = df[self.datecol].apply(lambda x: dt.datetime.strptime(x,"%Y-%M-%d"))
         pass
 
         
