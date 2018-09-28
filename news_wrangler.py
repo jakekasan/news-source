@@ -11,7 +11,11 @@ class News_Wrangler:
 
     def search(self,search=None,date=None):
         """
-            Prepare dates
+            returns text from news source
+
+            Params:
+            @search : term(s) to search for
+            @date : date of the price
         """
 
         if not date:
@@ -19,7 +23,7 @@ class News_Wrangler:
         
         to_date = "{}-{}-{}".format(date.year,date.month,date.day)
 
-        date = date - dt.timedelta(days=10)
+        date = date - dt.timedelta(days=3)
 
         from_date = "{}-{}-{}".format(date.year,date.month,date.day)
 
