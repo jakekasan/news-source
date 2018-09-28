@@ -12,6 +12,7 @@ import re
 
 
 
+
 def main():
 
     pwd = os.getcwd()
@@ -22,18 +23,21 @@ def main():
 
     data_dir = os.path.join(pwd,"data")
 
-    csv_regex = re.compile(r".*\.csv")
+    csv_regex = re.compile(r"(.*)\.csv")
+
+    companies = {}
 
     for f in os.listdir(data_dir):
-        match = csv_regex.search(f)
-        print(match.group())
-    return
+        match = csv_regex.match(f)
+        companies[match.group(1)] = str(match.group())
+
+    for company,filename in companies.items():
+        df = pd.read_csv(os.path.join("./data",filename))
+        print("Read data for {}".format(company))
+        print(df.head())
+
     #ticker_lookup("RBS")
     return
-
-    df = pd.read_csv("./data/RBS.csv")
-
-    print(df.head())
 
     df["date"] = df["Date"].apply(lambda x: dt.datetime.strptime(x,"%Y-%M-%d"))
 
