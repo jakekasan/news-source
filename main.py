@@ -15,7 +15,8 @@ class News_Source():
         pass
 
 
-
+def print_function():
+    print("This is main.py")
 
 
 def main():
@@ -58,5 +59,5 @@ def main():
 
     print(results.tail(1)["raw_text_guardian"].values)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
