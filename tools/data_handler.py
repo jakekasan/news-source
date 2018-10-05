@@ -1,4 +1,4 @@
-from news_source.sources.guardian import Guardian
+from sources.guardian import Guardian
 
 import datetime as dt
 import pandas as pd
