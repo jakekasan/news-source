@@ -3,14 +3,24 @@
 """
 
 from sources.guardian import Guardian
-
+import datetime as dt
 
 def single_lookup(query=None,date_from=None,date_to=None,array=False):
-        """
-            returns a single string of news articles based on the query and dates
+    """
+        returns a single string of news articles based on the query and dates
+        
+        if array == True then it returns an array of the articles
+    """
+    if query is None:
+        return None
+
+    if date_from is None:
+        if date_to is None:
+            date_from = dt.datetime.now()
+            date_to = dt.datetime.now()
             
-            if array == True then it returns an array of the articles
-        """
+
+    
 
 def range_lookup(query=None,df=None):
     """
