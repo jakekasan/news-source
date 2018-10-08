@@ -2,8 +2,11 @@
     Find a way of importing a dynamic amount of sources
 """
 
-from sources.guardian import Guardian
+#from sources.guardian import Guardian
+#from sources import all_sources
+import sources
 import datetime as dt
+
 
 def single_lookup(query=None,date_from=None,date_to=None,array=False):
     """
@@ -18,7 +21,7 @@ def single_lookup(query=None,date_from=None,date_to=None,array=False):
         if date_to is None:
             date_from = dt.datetime.now()
             date_to = dt.datetime.now()
-            
+
 
     
 
@@ -38,4 +41,16 @@ def range_lookup(query=None,df=None):
         """
         return None
 
+    if "date" not in df.columns:
+        """
+            maybe raise?
+        """
+        return None
+
     # Do the magic
+
+def main():
+    print(sources.Guardian)
+
+if __name__ == '__main__':
+    main()
