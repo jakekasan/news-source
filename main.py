@@ -1,63 +1,57 @@
-from data_handler import Data_Handler
-from news_wrangler import News_Wrangler
-from guardian import Guardian
-from config import config
-from ticker_lookup import ticker_lookup
+"""
+    Find a way of importing a dynamic amount of sources
+"""
 
+#from sources.guardian import Guardian
+#from sources import all_sources
+from sources import sources_list
 import datetime as dt
-import numpy as np
-import os
-import pandas as pd
-import re
-
-class News_Source():
-    def __init__(self,df=None,date_col=None):
-        pass
 
 
-def print_function():
-    print("This is main.py")
+def single_lookup(query=None,date_from=None,date_to=None,array=False):
+    """
+        returns a single string of news articles based on the query and dates
+        
+        if array == True then it returns an array of the articles
+    """
+    if query is None:
+        return None
 
+    if date_from is None:
+        if date_to is None:
+            date_from = dt.datetime.now()
+            date_to = dt.datetime.now()
+
+
+    
+
+def range_lookup(query=None,df=None):
+    """
+        returns a pd.Series of results for a range of dates for the given query
+    """
+    if query is None:
+        """
+            maybe raise?
+        """
+        return None
+
+    if df is None:
+        """
+            maybe raise?
+        """
+        return None
+
+    if "date" not in df.columns:
+        """
+            maybe raise?
+        """
+        return None
+
+    # Do the magic
 
 def main():
+    for thing in sources_list:
+        print(thing)
 
-    pwd = os.getcwd()
-
-    if "data" not in [x for x in os.listdir(pwd) if os.path.isdir(x)]:
-        print("No data directory")
-        return
-
-    data_dir = os.path.join(pwd,"data")
-
-    csv_regex = re.compile(r"(.*)\.csv")
-
-    companies = {}
-
-    for f in os.listdir(data_dir):
-        match = csv_regex.match(f)
-        companies[match.group(1)] = str(match.group())
-
-    for company,filename in companies.items():
-        df = pd.read_csv(os.path.join("./data",filename))
-        print("Read data for {}".format(company))
-        print(df.head())
-
-    #ticker_lookup("RBS")
-    return
-
-    df["date"] = df["Date"].apply(lambda x: dt.datetime.strptime(x,"%Y-%M-%d"))
-
-    print(df.head())
-
-    df["name"] = df.apply(lambda x: "RBS",axis=1)
-
-    df = df.head(20)
-
-    dh = Data_Handler()
-
-    results = dh.run(df)
-
-    print(results.tail(1)["raw_text_guardian"].values)
-
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
