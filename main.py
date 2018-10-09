@@ -22,6 +22,12 @@ def single_lookup(query=None,date_from=None,date_to=None,array=False):
             date_from = dt.datetime.now()
             date_to = dt.datetime.now()
 
+    articles = []
+
+    for source in sources_list:
+        s = source()
+        articles += s.single_lookup(query=query)
+
 
     
 
@@ -51,7 +57,8 @@ def range_lookup(query=None,df=None):
 
 def main():
     for thing in sources_list:
-        print(thing)
+        newthing = thing()
+        print(newthing.name)
 
 if __name__ == '__main__':
     main()
