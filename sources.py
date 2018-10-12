@@ -37,7 +37,14 @@ def config(source=None):
 
 def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,debug=False):
     """
-        returns a list of articles for the given query, date_from, date_to
+        returns a list of articles for the given query and date
+
+        params:
+            query: string, formatted like SQL (word1 AND (word2 OR word3), etc), default = None
+            date_from: datetime object, start of time period, default = None
+            date_to: datetime object, end of time period, default = None
+            raw_response: Bool, returns complete json response if true, default = False
+            debug: Bool, prints the url string if true, default = False
     """
     key = config(source="guardian")
 
@@ -71,14 +78,10 @@ def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,de
         return data
 
     if "response" in data.keys():
-
         if "results" in data["response"]:
-
             articles = data["response"]["results"]
             return list(map(lambda x: x["fields"]["bodyText"],articles))
-
         return []
-        
     return []
 
 
