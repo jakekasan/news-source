@@ -7,10 +7,13 @@ def get_date_range(date=None,date_range=3):
         returns date_from, date_to
     """
     if date is None:
-        date = None
+        date = dt.datetime.now()
 
     #if type(date) != dt.datetime:
         #date = dt.datetime.strptime(date)
+
+    if type(date) == str:
+        date = dt.datetime.strptime(date,"%Y-%m-%d")
 
     date_to = date
     date_from = date_to - dt.timedelta(days=date_range)
