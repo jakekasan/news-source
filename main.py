@@ -11,7 +11,7 @@ import datetime as dt
 import pandas as pd
 
 
-def single_lookup(query=None,date_from=None,date_to=None,articles=False,day_range=3):
+def single_lookup(query=None,date=None,articles=False,date_range=3,by_source=False):
     """
         returns a single string of news articles based on the query and dates
         
@@ -20,24 +20,31 @@ def single_lookup(query=None,date_from=None,date_to=None,articles=False,day_rang
     if query is None:
         return None
 
-    if date_from is None:
-        if date_to is None:
-            date_from = dt.datetime.now()
-            date_to = dt.datetime.now()
+    if date is None:
+        date = dt.datetime.now()
 
-    article_list = []
+    date_from,date_to = get_date_range(date=date,date_range=date_range)
 
-    for source in sources_list:
-        s = source()
-        article_list += s.single_lookup(query=query,date_from=date_from,date_to=date_to)
+    article_dict = {}
+
+    for key,source in all_sources.items():
+        article_dict[key] = source(query=query,date_from=date_from,date_to=date_to)
+
+    article_list = [x for x in article_dict.values()]
 
     if not articles:
-        return articles
+        if by_source:
+            return article_dict
+        return "".join(article_list)
+        
+    return article_list
+
+    
 
 
     
 
-def range_lookup(query=None,df=None,articles=False,date_range=3):
+def range_lookup(query=None,df=None,articles=True,date_range=3):
     """
         returns a pd.Series of results for a range of dates for the given query
     """
@@ -84,9 +91,8 @@ def main():
     df = pd.read_csv("./data/RBS.csv")
     data = df.sample(10)
 
-    for key,item in all_sources.items():
-        print(key,item)
-    print(data)
+    results = single_lookup(query="RBS",by_source=True)
+    print(results)
 
 if __name__ == '__main__':
     main()
