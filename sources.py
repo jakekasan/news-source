@@ -4,6 +4,7 @@
 
 import os
 import sys
+import requests
 
 def config(source=None):
     """
@@ -41,6 +42,37 @@ def guardian_lookup(query=None,date_from=None,date_to=None):
     key = config(source="guardian")
 
     if key is None:
+        # maybe raise an error
+        print("API_key not found in config")
         return None
 
-    
+    params = {
+        "q":query,
+        "date-from":date_from,
+        "date-to":date_to,
+        "api-key":key,
+        "show-fields":"bodyText",
+        "page-size":50
+    }
+
+    guardian_address = "https://content.guardianapis.com/search"
+
+    r = requests.get(guardian_address,params=params)
+
+    data = r.json()
+
+    if "response" in data.keys():
+
+        if "results" in data["response"]:
+
+            articles = data["response"]["results"]
+            return list(map(lambda x: x["fields"]["bodyText"],articles))
+
+        return []
+        
+    return []
+
+
+all_sources = {
+    "guardian":guardian_lookup
+}
