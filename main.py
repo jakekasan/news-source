@@ -4,8 +4,8 @@
 
 #from sources.guardian import Guardian
 #from sources import all_sources
-from sources import all_sources
-from tools import get_date_range, get_date_pair_from_str
+from .sources import all_sources
+from .tools import get_date_range, get_date_pair_from_str
 
 import requests
 import re
