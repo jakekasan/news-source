@@ -21,8 +21,6 @@ def config(source=None):
     with open("./api.keys","r") as f:
         raw_lines = f.readlines()
 
-        print(raw_lines)
-
         api_keys = {}
         for line in raw_lines:
             data = line.split(":")
@@ -37,7 +35,7 @@ def config(source=None):
 
 
 
-def guardian_lookup(query=None,date_from=None,date_to=None):
+def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,debug=False):
     """
         returns a list of articles for the given query, date_from, date_to
     """
@@ -48,10 +46,13 @@ def guardian_lookup(query=None,date_from=None,date_to=None):
         print("API_key not found in config")
         raise Exception("API key for {} was not found.\nPlease format api.keys file like so: [name of source]:[api key]")
 
+    date_from = date_from.strftime("%Y-%m-%d")
+    date_to = date_to.strftime("%Y-%m-%d")
+
     params = {
         "q":query,
-        "date-from":date_from,
-        "date-to":date_to,
+        "from-date":date_from,
+        "to-date":date_to,
         "api-key":key,
         "show-fields":"bodyText",
         "page-size":50
@@ -61,7 +62,13 @@ def guardian_lookup(query=None,date_from=None,date_to=None):
 
     r = requests.get(guardian_address,params=params)
 
+    if debug:
+        print(r.url)
+
     data = r.json()
+
+    if raw_response:
+        return data
 
     if "response" in data.keys():
 
@@ -73,6 +80,7 @@ def guardian_lookup(query=None,date_from=None,date_to=None):
         return []
         
     return []
+
 
 
 all_sources = {
