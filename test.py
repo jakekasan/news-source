@@ -1,11 +1,22 @@
 import unittest
+import main
 
+class Main_Tests(unittest.TestCase):
+    def test_if_single_lookup_exists(self):
+        self.assertIsNotNone(main.single_lookup)
 
-class Import_Main(unittest.TestCase):
-    def test_main_exists(self):
-        from main import main
+    def test_if_range_lookup_exists(self):
+        self.assertIsNotNone(main.range_lookup)
 
-        self.assertIsInstance(main,object)
+    def test_if_single_lookup_returns_none(self):
+        self.assertIsNone(main.single_lookup())
+
+    def test_if_range_lookup_returns_none(self):
+        self.assertIsNone(main.range_lookup())
+
+        
+def run_tests():
+    unittest.main()
 
 if __name__ == '__main__':
-    unittest.main()
+    run_tests()
