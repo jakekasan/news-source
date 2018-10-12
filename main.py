@@ -7,13 +7,14 @@
 from .sources import all_sources
 from .tools import get_date_range, get_date_pair_from_str
 
+from functools import reduce
 import requests
 import re
 import datetime as dt
 import pandas as pd
 import test
 
-def single_lookup(query=None,date=None,articles=False,date_range=3,by_source=False):
+def single_lookup(query=None,date=None,articles_as_list=False,date_range=3,by_source=False,debug=False):
     """
         returns a single string of news articles based on the query and dates
         
@@ -32,17 +33,28 @@ def single_lookup(query=None,date=None,articles=False,date_range=3,by_source=Fal
     for key,source in all_sources.items():
         article_dict[key] = source(query=query,date_from=date_from,date_to=date_to)
 
-    article_list = [x for x in article_dict.values()]
+    if debug:
+        print(f"article_dict has {len(article_dict.keys())} source")
+        for key in article_dict.keys():
+            print(f"source '{key}' has {len(article_dict[key])} articles")
 
-    if not articles:
+    # article_list = [x for x in article_dict.values()]
+    article_list = reduce(lambda x,y: x+y,article_dict.values())
+
+    if debug:
+        print(f"article_list has {len(article_list)} items")
+
+    if not articles_as_list:
         if by_source:
             return article_dict
+        # if debug:
+        #     print(article_list)
         return "".join(article_list)
         
     return article_list
 
     
-def range_lookup(query=None,df=None,article_list=True,date_range=3,date_col="Date"):
+def range_lookup(query=None,df=None,article_list=True,date_range=3,date_col="Date",debug=False):
     """
         takes a pandas dataframe and returns it with a one column per source
 
@@ -81,12 +93,17 @@ def range_lookup(query=None,df=None,article_list=True,date_range=3,date_col="Dat
             return articles
         else:
             return "".join(articles)
-        
-        
-    for key,item in all_sources.items():
-        df["{}_article_list".format(key)] = df.apply(lambda x: get_results_for_row(row=x,query=query,source=item),axis=1)
 
-    return df
+    def get_single_results_for_row(row):
+        return single_lookup(query=query,date=row[date_col],date_range=date_range)
+        
+    results = df.apply(lambda x: get_single_results_for_row(x),axis=1)
+
+    # for key,item in all_sources.items():
+    #     df["{}_article_list".format(key)] = df.apply(lambda x: get_results_for_row(row=x,query=query,source=item),axis=1)
+
+    return results
+
 
 def main():
     test.run_tests()
