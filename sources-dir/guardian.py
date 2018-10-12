@@ -73,3 +73,6 @@ class Guardian(News_Wrangler):
 
         except:
             return ""
+
+
+    def single_lookup(self,query=None,date_from=None,date_to=None):
