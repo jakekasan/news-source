@@ -51,7 +51,7 @@ def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,de
     if key is None:
         # maybe raise an error
         print("API_key not found in config")
-        raise Exception("API key for {} was not found.\nPlease format api.keys file like so: [name of source]:[api key]")
+        raise Exception("API key for {} was not found.\nPlease format api.keys file like so: [name of source]:[api key]".format("guardian"))
 
     date_from = date_from.strftime("%Y-%m-%d")
     date_to = date_to.strftime("%Y-%m-%d")
@@ -69,8 +69,8 @@ def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,de
 
     r = requests.get(guardian_address,params=params)
 
-    if debug:
-        print(r.url)
+    # if debug:
+    #     print(r.url)
 
     data = r.json()
 
@@ -80,8 +80,14 @@ def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,de
     if "response" in data.keys():
         if "results" in data["response"]:
             articles = data["response"]["results"]
+            if debug:
+                print(f"Length of response for query {r.url}\n\nLength: {len(articles)}")
             return list(map(lambda x: x["fields"]["bodyText"],articles))
+        if debug:
+            print(f"No results for query {r.url}")
         return []
+    if debug:
+        print(f"No results for query {r.url}")
     return []
 
 
