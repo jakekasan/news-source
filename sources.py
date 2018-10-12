@@ -18,8 +18,10 @@ def config(source=None):
     if "api.keys" not in os.listdir():
         return None
 
-    with open("api.keys","w") as f:
+    with open("./api.keys","r") as f:
         raw_lines = f.readlines()
+
+        print(raw_lines)
 
         api_keys = {}
         for line in raw_lines:
@@ -44,7 +46,7 @@ def guardian_lookup(query=None,date_from=None,date_to=None):
     if key is None:
         # maybe raise an error
         print("API_key not found in config")
-        return None
+        raise Exception("API key for {} was not found.\nPlease format api.keys file like so: [name of source]:[api key]")
 
     params = {
         "q":query,
