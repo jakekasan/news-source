@@ -2,7 +2,7 @@ import datetime as dt
 
 def get_date_range(date=None,date_range=3):
     """
-        takes a date (string or datetime object)
+        takes a date (string)
         
         returns date_from, date_to
     """
