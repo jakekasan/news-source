@@ -35,7 +35,7 @@ def config(source=None):
 
 
 
-def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,debug=False):
+def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,debug=False,page=None):
     """
         returns a list of articles for the given query and date
 
@@ -64,6 +64,9 @@ def guardian_lookup(query=None,date_from=None,date_to=None,raw_response=False,de
         "show-fields":"bodyText",
         "page-size":50
     }
+
+    if page is not None:
+        params["page"] = page
 
     guardian_address = "https://content.guardianapis.com/search"
 
