@@ -16,9 +16,16 @@ def create_app(config_name):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
 
+    @app.route("/")
+    def home():
+        return "This will be a simple one-page app to view the table"
+        
+    # API Stuff
     @app.route("/articles/",methods=["GET","POST"])
     def articles():
         from app.models import Article
+
+        # GET METHOD
         if request.method == "GET":
             date = request.args.get("date")
             if date:
