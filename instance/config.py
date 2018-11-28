@@ -5,10 +5,10 @@ class BaseConfig(object):
     SECRET = os.getenv('SECRET')
 
 class DevelopmentConfig(BaseConfig):
-    SQLITE_URI = os.getenv("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
 
 class TestingConfig(BaseConfig):
-    SQLITE_URI = "./tests/test.db"
+    SQLALCHEMY_DATABASE_URI = "./tests/test.db"
 
 app_config = {
     "development":DevelopmentConfig,
