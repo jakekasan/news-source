@@ -1,4 +1,4 @@
-from sources import guardian_lookup
+from app.src.sources import guardian_lookup
 import time
 import datetime as dt
 from sqlalchemy import create_engine, ForeignKey
