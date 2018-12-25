@@ -38,7 +38,6 @@ def single_lookup(query=None,date=None,articles_as_list=False,date_range=3,by_so
         for key in article_dict.keys():
             print(f"source '{key}' has {len(article_dict[key])} articles")
 
-    # article_list = [x for x in article_dict.values()]
     article_list = reduce(lambda x,y: x+y,article_dict.values())
 
     if debug:
@@ -47,8 +46,6 @@ def single_lookup(query=None,date=None,articles_as_list=False,date_range=3,by_so
     if not articles_as_list:
         if by_source:
             return article_dict
-        # if debug:
-        #     print(article_list)
         return "".join(article_list)
         
     return article_list
