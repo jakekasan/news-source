@@ -19,7 +19,7 @@ def create_app(config_name):
     @app.route("/")
     def home():
         return "This will be a simple one-page app to view the table"
-        
+
     # API Stuff
     @app.route("/articles/",methods=["GET","POST"])
     def articles():
@@ -29,26 +29,37 @@ def create_app(config_name):
         if request.method == "GET":
             date = request.args.get("date")
             if date:
-                all_articles = Article.query.distinct(Article.date_published).all()
-
                 date = parser.parse(date)
 
-                for article in all_articles:
-                    article_date = article.date_published
-                    to_date = article_date + dt.timedelta(days=1)
+                from_date = date
+                to_date = from_date + dt.timedelta(days=1)
 
-                    if date.year == article_date.year and date.month == article_date.month and date.day == article_date.day:
-                        raw_results = Article.query.filter(Article.date_published >= article_date).filter(Article.date_published < to_date)
-                        results = []
-                        for result in raw_results:
-                            results.append({
-                                "title":result.api_webTitle,
-                                "text":result.article_text,
-                                "date":result.date_published
-                            })
-                        results = jsonify(results)
-                        return results
-                return "I do not have this date."
+                raw_results = Article.query.filter(Article.date_published >= from_date).filter(Article.date_published < to_date).all()
+                
+                if len(raw_results) < 1:
+                    # bad result
+
+                    # TODO
+                    #  - if we have no articles, fetch from the guardian API
+
+                    return jsonify({
+                        "success":False
+                    })
+
+                results = []
+                for result in raw_results:
+                    results.append({
+                        "title":result.api_webTitle,
+                        "text":result.article_text,
+                        "date":result.date_published
+                    })
+
+                results = jsonify({
+                    "results":results,
+                    "success":True
+                })
+                return results
+                
                 
                 #return "{}".format(type(thing))
                 # return "Got an actual date! {}".format(date)
