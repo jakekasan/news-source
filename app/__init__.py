@@ -1,4 +1,4 @@
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, render_template
 
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
@@ -9,16 +9,43 @@ from dateutil import parser
 
 db = SQLAlchemy()
 
-def create_app(config_name):
+def create_app(config_name="development"):
     app = FlaskAPI(__name__, instance_relative_config=True)
-    app.config.from_object(app_config[config_name])
+    conf = app_config[config_name]
+    app.config.from_object(conf)
     app.config.from_pyfile("config.py")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
 
     @app.route("/")
     def home():
-        return "This will be a simple one-page app to view the table"
+        articles = [
+            {
+                "api_id":1,
+                "api_webPublicationDate":"01-01-2001",
+                "api_webTitle":"First article of the year"
+            },
+            {
+                "api_id":2,
+                "api_webPublicationDate":"02-01-2001",
+                "api_webTitle":"Second article of the year"
+            },
+            {
+                "api_id":3,
+                "api_webPublicationDate":"03-01-2001",
+                "api_webTitle":"Last article of the year"
+            }
+        ]
+        #return jsonify(app_config)
+        return render_template("content.html",articles=articles)
+        #return "This will be a simple one-page app to view the table"
+
+    @app.route("/search/",methods=["GET","POST"])
+    def search():
+        if request.method == "GET":
+            return render_template("search.html")
+        else:
+            return render_template("content.html")
 
     # API Stuff
     @app.route("/articles/",methods=["GET","POST"])
@@ -58,6 +85,7 @@ def create_app(config_name):
                     "results":results,
                     "success":True
                 })
+
                 return results
                 
                 
