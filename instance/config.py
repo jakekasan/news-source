@@ -2,13 +2,18 @@ import os
 
 
 class BaseConfig(object):
+    DEBUG = False
+    CSRF_ENABLED = True
     SECRET = os.getenv('SECRET')
+    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+    TEMPLATE_FOLDER = "./templates"
 
 class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+    DEBUG = True
 
 class TestingConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "./tests/test.db"
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = "sqlite3:///:memory:"
 
 app_config = {
     "development":DevelopmentConfig,
